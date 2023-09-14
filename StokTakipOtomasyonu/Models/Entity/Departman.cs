@@ -6,6 +6,8 @@ namespace StokTakip.Models.Entity
     {
         [Key]
         public int DepartmanId { get; set; }
-        public string DepatmanAdi { get; set;}
+
+        [Required(ErrorMessage ="Bu alanı boş geçmeyiniz")]
+        public string DepartmanAdi { get; set;}
     }
 }

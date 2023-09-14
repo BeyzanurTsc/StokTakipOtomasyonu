@@ -8,6 +8,7 @@ namespace StokTakip.Models.Entity
         public int KategoriId { get; set; }
         public string KategoriAd { get; set; }
         public string Aciklama { get; set; }
+        public string Icon { get; set; }
 
     }
 }

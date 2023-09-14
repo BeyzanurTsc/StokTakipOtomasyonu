@@ -2,169 +2,29 @@
     ViewData["Title"] = "Home Page";
 }
 <style>
-    .tbl_div {
-        margin-top: 10px;
+    #kategori-kart {
+        display: flex;
+        flex-wrap: wrap;
     }
 
-    #birimId{
-        display:none;
+    .inner {
+        padding-left: 15px;
+        padding-top: 10px;
     }
+
+    a:hover {
+        cursor: pointer;
+    }
+
 </style>
+<h1>Stok Takip Otomasyonu</h1>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.2.0/css/adminlte.min.css" integrity="sha512-IuO+tczf4J43RzbCMEFggCWW5JuX78IrCJRFFBoQEXNvGI6gkUw4OjuwMidiS4Lm9Q2lILzpJwZuMWuSEeT9UQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+<div id="kategori-kart" class="container-fluid" style="margin-top:20px;">
+</div>
+
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/js/bootstrap.min.js"></script>
-
-
-<h1>Birim Listesi</h1>
-<button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modal1">Birim Ekle</button>
-
-<div class="tbl_div">
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Sil</th>
-                <th>Güncelle</th>
-            </tr>
-        </thead>
-        <tbody id="birimList">
-        </tbody>
-    </table>
-</div>
-
-
-@***********************************Veri Ekleme Modalı******************************@
-<div class="modal" id="modal1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">Birim Ekle</h2>
-            </div>
-            <form method="post" action="/Home/BirimEkle">
-                <div class="modal-body">
-                   
-                    <label>Birim Adı: </label>
-                    <input type="text" name="BirimAdi" class="form-control" id="b_Adi" />
-                    <br />
-                    <button type="submit" class="btn btn-info" onclick="InsertData()">Kaydet</button>
-
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-@***********************************Veri Güncelleme Modalı******************************@
-<div class="modal" id="modal2">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">Güncelle</h2>
-            </div>
-            <form method="post" action="/Home/BirimGüncelle">
-                <div class="modal-body">
-                    <input type="text" name="BirimId" class="form-control" id="birimId" />
-                    <label>Birim Adı: </label>
-                    <input type="text" name="BirimAdi" class="form-control" id="birimAdi" />
-                    <br />
-                    <button type="submit" class="btn btn-info" onclick="UpdateData()">Kaydet</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-
-<script>
-    $(document).ready(function () {
-        GetData();
-    })
-
-
-    function Delete(id) {
-        $.ajax({
-            url: '/Home/BirimSil?id=' + id,
-            success: function () {
-                GetData();
-                alert("Veri silindi! ");
-            }
-        });
-    }
-
-    function InsertData() {
-       var objData={
-            BirimId:BirimId,
-            BirimAdi: $('#b_Adi').val()
-       }
-       $.ajax({
-           url:'/Home/BirimEkle',
-           type:'Post',
-           data:objData,
-           dataType:'json',
-           success:function(){
-               GetData();
-               alert('Veri kaydedildi :) ');
-
-           }
-       });
-
-    }
-
-    //Textbox a id ye göre veri getirme
-    function GetTextBoxData(id){
-        $.ajax({
-            url: '/Home/GetTextBoxData?id='+id,
-            type:'Get',
-            dataType:'json',
-            success:function(response){
-               console.log(response);
-                $('#birimAdi').val(response.birimAdi),
-                $('#birimId').val(response.birimId)
-            }
-        
-        })
-    }
-
-    function UpdateData(){
-        console.log('Veri güncellendi')
-        var objData={
-            BirimId: $('#birimId').val(),
-            BirimAdi: $('#birimAdi').val()
-        }
-        $.ajax({
-            url:'/Home/BirimGüncelle',
-            type:'Post',
-            data:objData,
-            dataType:'json',
-            success:function(){
-                alert("Veri güncellendi!!!!");
-            }
-
-        })
-
-    }
-
-
-    //Veri Getir
-    function GetData() {
-        var html = '';
-        $.ajax({
-            type: 'GET',
-            url: '/Home/BirimGetir',
-            success: function (response) {
-                $.each(response, function (key, item) {
-                    html += '<tr><td>' + item.birimId + '</td><td>' + item.birimAdi + '</td> <td>'
-                        + '<a href="#" onclick="Delete(' + item.birimId + ')" class="btn btn-danger">Sil</a></td><td>'
-                        + '<a href="#" onclick="GetTextBoxData('+item.birimId+')" class="btn btn-success" data-toggle="modal" data-target="#modal2">Update</a></td></tr>';
-                    console.log(item);
-                });
-                $("#birimList").html(html);
-
-
-            }
-        });
-    }
-</script>
-
-
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.2.0/js/adminlte.min.js"></script>
+<script src="/js/Index.js"></script>

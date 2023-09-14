@@ -1,0 +1,112 @@
+﻿
+@{
+    ViewData["Title"] = "KullanıcıList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    table {
+        margin-top: 10px;
+    }
+</style>
+<h1>Kullanıcılar</h1>
+<a href="/Home/UrunList" class="btn btn-warning"><i class="fa-regular fa-hand-point-left"></i></a>
+<button class="btn btn-primary" id="addBtn">Ekle</button>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Ad</th>
+            <th>Soyad</th>
+            <th>Aktif mi?</th>
+            <th>İşlemler</th>
+        </tr>
+    </thead>
+    <tbody id="tableData"></tbody>
+</table>
+
+@*Ekle modal*@
+<div class="modal fade modal" id="addMdl">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="text-info modal-title">Kullanıcı Ekle</h1>
+                <button class="btn-close text-danger" data-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post">
+                    <div class="form-group">
+                        <div>
+                            <label>Kullanıcı Adı</label>
+                            <input type="text" class="form-control" id="add-KullaniciAd" required />
+                        </div>
+                        <div>
+                            <label>Kullanıcı Soyad</label>
+                            <input type="text" class="form-control" id="add-KullaniciSoyad" required />
+                        </div>
+                        <label style="margin-top:15px;">Aktif Mi?</label>
+                        <div style="font-size:large;">
+                            <label for="option1">Aktif</label>
+                            <input type="radio" id="option1" name="radioValue" value="Aktif" />
+                            <label for="option2">Pasif</label>
+                            <input type="radio" id="option2" name="radioValue" value="Pasif" />
+                        </div>
+
+
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-primary" id="saveBtn" onclick="AddData();">Kaydet</button>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@*Güncelle modal*@
+<div class="modal fade modal" id="updateMdl">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="text-info modal-title">Güncelle</h1>
+                <button class="btn-close text-danger" data-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post">
+                    <div class="form-group">
+                        <label>Id</label>
+                        <input type="text" class="form-control" id="upd-kullaniciId" disabled="disabled" />
+                        <label>Ad</label>
+                        <input type="text" class="form-control" id="upd-kullaniciAd" required />
+                        <label>Soyad</label>
+                        <input type="text" class="form-control" id="upd-kullaniciSoyad" required />
+                        <label style="margin-top:15px;">Aktif Mi?</label>
+                        <div style="font-size:large;">
+                            <label for="option1">True</label>
+                            <input type="radio" id="option1" name="radioValue1" value="true" />
+                            <label for="option2">False</label>
+                            <input type="radio" id="option2" name="radioValue1" value="false" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-primary" id="updateSaveBtn" onclick="UpdateData()">Kaydet</button>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+@*<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/js/bootstrap.min.js"></script>*@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<script src="/js/Kullanicilar.js"></script>
+

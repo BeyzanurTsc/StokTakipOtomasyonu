@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StokTakip.Models.Entity;
+using StokTakipOtomasyonu.Models.Entity;
 
 namespace StokTakip.Models.Context
 {
@@ -14,7 +15,7 @@ namespace StokTakip.Models.Context
         public DbSet<Personel> Personel { get; set; }
         public DbSet<Birimler> Birimler { get; set; }
         public DbSet<Urunler> Urunler { get; set; }
-        public DbSet<Grup> Grup { get; set; }
+        public DbSet<Depo> Depo { get; set; }
         public DbSet<Kullanicilar> Kullanicilar { get; set; }
       
     }  

@@ -1,0 +1,233 @@
+﻿
+@{
+    ViewData["Title"] = "KategoriList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h1>Kategoriler Listesi</h1>
+<style>
+    table {
+        margin-top: 10px;
+    }
+  
+    .iconOrnekleriDiv , .iconHeader {
+        display: flex;
+    }
+
+    .iconHeader {
+        margin-top: 10px;
+    }
+
+    #ornekler , #ornekler-upd {
+        display: none;
+    }
+
+    .iconHeader i:hover {
+        cursor: pointer;
+    }
+</style>
+<a href="/Home/UrunList" class="btn btn-warning"><i class="fa-regular fa-hand-point-left"></i></a>
+<button class="btn btn-primary" id="addBtn">Ekle</button>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Ad</th>
+            <th>Açıklama</th>
+            <th>İşlemler</th>
+            <th>Icon</th>
+        </tr>
+    </thead>
+    <tbody id="tableData"></tbody>
+</table>
+@*Ekle modal*@
+<div class="modal fade modal" id="addKategoriMdl">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="text-info modal-title">Kategori Ekle</h1>
+                <button class="btn-close text-danger" data-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post">
+                    <div class="form-group">
+
+                        <label>Kategori Name</label>
+                        <input type="text" class="form-control" id="kName" required />
+
+                        <label>Açıklama</label>
+                        <input type="text" class="form-control" id="AddDescription" required />
+
+                        <div class="iconHeader">
+                            <label>Icon</label>
+                            <i id="showIcon" class="fa-solid fa-arrow-down"></i>
+                        </div>
+                        <input type="text" class="form-control" id="add-Icon" placeholder="Yukarıdaki icon a tıklayarak örneklere bakabilirsiniz." />
+
+                        <div id="ornekler">
+                            <div class="iconOrnekleriDiv">
+                                <label>Icon örnekleri</label>
+                            </div>
+                            <div class="iconOrnekleriDiv">
+                                <i class="fa-solid fa-keyboard"></i>
+                                <code>fa-solid fa-keyboard</code>
+                            </div>
+                            <div class="iconOrnekleriDiv">
+                                <i class="fa-solid fa-computer"></i>
+                                <code>fa-solid fa-computer</code>
+                            </div>
+                            <div class="iconOrnekleriDiv">
+                                <i class="fa-solid fa-print"></i>
+                                <code>fa-solid fa-print</code>
+                            </div>
+                            <div class="iconOrnekleriDiv">
+                                <i class="fa-solid fa-tablet"></i>
+                                <code>fa-solid fa-tablet</code>
+                            </div>
+                            <div class="iconOrnekleriDiv">
+                                <i class="fa-solid fa-camera-retro"></i>
+                                <code>fa-solid fa-camera-retro</code>
+                            </div>
+                            <div class="iconOrnekleriDiv">
+                                <i class="fa-solid fa-desktop"></i>
+                                <code>fa-solid fa-desktop</code>
+                            </div>
+                            <div class="iconOrnekleriDiv">
+                                <i class="fa-solid fa-walkie-talkie"></i>
+                                <code>fa-solid fa-walkie-talkie</code>
+                            </div>
+                            <div class="iconOrnekleriDiv">
+                                <i class="fa-solid fa-plug"></i>
+                                <code>fa-solid fa-plug</code>
+                            </div>
+                            <div class="iconOrnekleriDiv">
+                                <i class="fa-solid fa-memory"></i>
+                                <code>fa-solid fa-memory</code>
+                            </div>
+                            <div class="iconOrnekleriDiv">
+                                <i class="fa-solid fa-hard-drive"></i>
+                                <code>fa-solid fa-hard-drive</code>
+                            </div>
+                            <div class="iconOrnekleriDiv">
+                                <i class="fa-solid fa-ethernet"></i>
+                                <code>fa-solid fa-ethernet</code>
+                            </div>
+                            <div class="iconOrnekleriDiv">
+                                <i class="fa-solid fa-car-battery"></i>
+                                <code>fa-solid fa-car-battery</code>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-primary" id="saveBtn" onclick="AddData();">Kaydet</button>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@*Güncelle modal*@
+<div class="modal fade modal" id="UpdateKategoriMdl">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="text-info modal-title">Güncelle</h1>
+                <button class="btn-close text-danger" data-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post">
+                    <div class="form-group">
+                        <label>Id</label>
+                        <input type="text" class="form-control" id="k_Id" disabled="disabled" />
+                        <label>Kategori Adı</label>
+                        <input type="text" class="form-control" id="k_Name" required />
+                        <label>Açıklama</label>
+                        <input type="text" class="form-control" id="updt_description" required />
+                        <div class="iconHeader">
+                            <label>Icon</label>
+                            <i id="upd-showIcon" class="fa-solid fa-arrow-down"></i>
+                        </div>
+                        <input type="text" class="form-control" id="upd-Icon" placeholder="Yukarıdaki icon dan örneklere bakabilirsiniz." />
+                        <div id="ornekler-upd">
+                            <div class="iconOrnekleriDiv">
+                                <label>Icon örnekleri</label>
+                            </div>
+                            <div class="iconOrnekleriDiv">
+                                <i class="fa-solid fa-keyboard"></i>
+                                <code>fa-solid fa-keyboard</code>
+                            </div>
+                            <div class="iconOrnekleriDiv">
+                                <i class="fa-solid fa-computer"></i>
+                                <code>fa-solid fa-computer</code>
+                            </div>
+                            <div class="iconOrnekleriDiv">
+                                <i class="fa-solid fa-print"></i>
+                                <code>fa-solid fa-print</code>
+                            </div>
+                            <div class="iconOrnekleriDiv">
+                                <i class="fa-solid fa-tablet"></i>
+                                <code>fa-solid fa-tablet</code>
+                            </div>
+                            <div class="iconOrnekleriDiv">
+                                <i class="fa-solid fa-camera-retro"></i>
+                                <code>fa-solid fa-camera-retro</code>
+                            </div>
+                            <div class="iconOrnekleriDiv">
+                                <i class="fa-solid fa-desktop"></i>
+                                <code>fa-solid fa-desktop</code>
+                            </div>
+                            <div class="iconOrnekleriDiv">
+                                <i class="fa-solid fa-walkie-talkie"></i>
+                                <code>fa-solid fa-walkie-talkie</code>
+                            </div>
+                            <div class="iconOrnekleriDiv">
+                                <i class="fa-solid fa-plug"></i>
+                                <code>fa-solid fa-plug</code>
+                            </div>
+                            <div class="iconOrnekleriDiv">
+                                <i class="fa-solid fa-memory"></i>
+                                <code>fa-solid fa-memory</code>
+                            </div>
+                            <div class="iconOrnekleriDiv">
+                                <i class="fa-solid fa-hard-drive"></i>
+                                <code>fa-solid fa-hard-drive</code>
+                            </div>
+                            <div class="iconOrnekleriDiv">
+                                <i class="fa-solid fa-ethernet"></i>
+                                <code>fa-solid fa-ethernet</code>
+                            </div>
+                            <div class="iconOrnekleriDiv">
+                                <i class="fa-solid fa-car-battery"></i>
+                                <code>fa-solid fa-car-battery</code>
+                            </div>
+                            @*<div class="iconOrnekleriDiv">
+                                <i class="fa-solid fa-car-battery"></i>
+                                <code>fa-solid fa-car-battery</code>
+                            </div>*@
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-primary" id="updateSaveBtn" onclick="UpdateData()">Kaydet</button>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+@*<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/js/bootstrap.min.js"></script>
+*@<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<script src="/js/Kategori.js"></script>
+
+
+
+

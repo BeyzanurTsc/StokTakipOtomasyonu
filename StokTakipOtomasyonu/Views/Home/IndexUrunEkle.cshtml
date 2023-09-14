@@ -1,0 +1,191 @@
+﻿@{
+    ViewData["Title"] = "IndexUrunEkle";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .col-4 {
+        margin-top: 10px;
+    }
+
+    #saveBtn {
+        margin-left: 13px;
+        margin-top: 5px;
+    }
+</style>
+<div class="container-fluid">
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Ürün Ekle</h3>
+                </div>
+                <form class="form-control" method="post">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-4">
+                                <label>Depo</label>
+                                <select id="add-depoId" class="form-control" required>
+                                    <option value="">Depo seçiniz</option>
+                                </select>
+                            </div>
+                            <div class="col-4">
+                                <label>Urun Kod</label>
+                                <input type="text" class="form-control" id="add-urunKod" required />
+                            </div>
+                            <div class="col-4">
+                                <label>Urun Adi</label>
+                                <input type="text" class="form-control" id="add-urunAdi" required />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">
+                                <label>Açıklama</label>
+                                <input type="text" class="form-control" id="add-aciklama" required />
+                            </div>
+                            <div class="col-4">
+                                <label>Cihaz Tip</label>
+                                <input type="text" class="form-control" id="add-cihazTip" required />
+                            </div>
+                            <div class="col-4">
+                                <label>Marka</label>
+                                <input type="text" class="form-control" id="add-marka" required />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">
+                                <label>Model</label>
+                                <input type="text" class="form-control" id="add-model" required />
+                            </div>
+                            <div class="col-4">
+                                <label>Seri No</label>
+                                <input type="text" class="form-control" id="add-seriNo" required />
+                            </div>
+                            <div class="col-4">
+                                <label>Kullanıcı</label>
+                                <select id="add-kullaniciId" class="form-control" required>
+                                    <option value="">Kullanıcı seçiniz</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">
+                                <label>Kategori Id</label>
+                                <input type="text" class="form-control" id="kategoriId" value="@ViewBag.KategoriId" readonly />
+                            </div>
+                            <div class="col-4">
+                                <label>Depodan Çıkış Tarihi</label>
+                                <input type="date" class="form-control" id="add-cikisTarihi" />
+                            </div>
+                            <div class="col-4">
+                                <label style="margin-top:15px;">Stok Durumu</label>
+                                <div style="font-size:large;">
+                                    <label for="option1">Var</label>
+                                    <input type="radio" id="option1" name="radioValue" value="true" />
+                                    <label for="option2">Yok</label>
+                                    <input type="radio" id="option2" name="radioValue" value="false" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button class="btn btn-primary" id="saveBtn">Kaydet</button>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#saveBtn").click(function () {
+            AddData();
+        });
+
+        $.ajax({
+            url: '/Home/DepoGetir',
+            type: 'GET',
+            dataType: 'json',
+            success: function (depo) {
+                var depoDropdown = $('#add-depoId');
+                var depoDropdown_upd = $('#upd-depoId');
+                depo.forEach(function (depo) {
+                    depoDropdown.append($('<option>', {
+                        value: depo.depoId,
+                        text: depo.depoAdi
+                    }));
+                    depoDropdown_upd.append($('<option>', {
+                        value: depo.depoId,
+                        text: depo.depoAdi
+                    }));
+                });
+            }
+        });
+
+        $.ajax({
+            url: '/Home/KullaniciGetir',
+            type: 'GET',
+            dataType: 'json',
+            success: function (kullanicilar) {
+                var kullaniciDropdown = $('#add-kullaniciId');
+                var kullaniciDropdown_upd = $('#upd-kullaniciId');
+                kullanicilar.forEach(function (kullanici) {
+                    kullaniciDropdown.append($('<option>', {
+                        value: kullanici.kullaniciId,
+                        text: kullanici.kullaniciAd + ' ' + kullanici.kullaniciSoyad
+                    }));
+                    kullaniciDropdown_upd.append($('<option>', {
+                        value: kullanici.kullaniciId,
+                        text: kullanici.kullaniciAd + ' ' + kullanici.kullaniciSoyad
+                    }));
+                });
+            }
+        });
+
+    });
+
+    function AddData() {
+        debugger
+        var kategoriId = $("#kategoriId").val();
+        var objData = {
+            DepoId: $('#add-depoId').val(),
+            UrunKod: $('#add-urunKod').val(),
+            UrunAdi: $('#add-urunAdi').val(),
+            Aciklama: $('#add-aciklama').val(),
+            CihazTip: $('#add-cihazTip').val(),
+            Marka: $('#add-marka').val(),
+            Model: $('#add-model').val(),
+            SeriNo: $('#add-seriNo').val(),
+            KullaniciId: $('#add-kullaniciId').val(),
+            KategoriId: kategoriId,
+            EklenmeTarihi: $('#add-eklenmeTarihi').val(),
+            CikisTarihi: $('#add-cikisTarihi').val(),
+            StokDurum: $('input[name="radioValue"]:checked').val() === 'true'
+
+        }
+
+        console.log("Ekle " + JSON.stringify(objData));
+
+        $.ajax({
+            url: '/Home/UrunEkle',
+            type: 'POST',
+            data: JSON.stringify(objData),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function () {
+                if (confirm('Ekleme işlemi başarılı.Anasayfaya yönlendirilsin mi?')) {
+                    window.location.href = '/Home/Index';
+                }
+            },
+
+            error: function () {
+                alert('Ekleme işlemi başarısız');
+            }
+        });
+    }
+
+</script>
+
+

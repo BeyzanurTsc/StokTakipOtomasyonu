@@ -1,0 +1,237 @@
+﻿@{
+    ViewData["Title"] = "UrunList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<style>
+
+    table {
+        margin-top: 10px;
+    }
+   .container{
+        margin-left: 25px;
+    }
+
+
+    th{
+        max-width: 130px; /* İstenen maksimum genişliği belirleyin */
+        white-space: nowrap; /* Metnin alt satıra geçmesini engelle */
+        overflow: hidden; /* Taşan içeriği gizle */
+        text-overflow: ellipsis; /* Taşan içerik için üç nokta (...) göster */
+        text-align:center;
+    }
+    .islemler{
+        white-space: nowrap;
+    }
+    #info{
+        color:pink;
+    }
+</style>
+<h1>Ürün Listesi</h1>
+<button class="btn btn-primary" id="addBtn">Ekle</button>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Ürün Kodu</th>
+            <th>Kategori Id <a href="/Home/KategoriList"><i class="fa-solid fa-table"></i></a></th>
+            <th>Depo Id <a href="/Home/DepoList"><i class="fa-solid fa-table"></i></a></th>
+            <th>Kullanıcı Id <a href="/Home/KullaniciList"><i class="fa-solid fa-table"></i></a></th>
+            <th>Ürün Adı</th>
+            <th>Açıklama</th>
+            <th>Cihaz Tipi</th>
+            <th>Marka</th>
+            <th>Model</th>
+            <th>Seri No</th>
+            <th>Eklenme Tarihi</th>
+            <th>Depodan Çıkış Tarihi</th>
+            <th>Stok Durumu</th>
+            <th>İşlemler</th>
+        </tr>
+    </thead>
+    <tbody id="tableData"></tbody>
+</table>
+
+@*Ekle modal*@
+<div class="modal fade modal" id="addMdl">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="text-info modal-title">Ürün Ekle</h1>
+                <button class="btn-close text-danger" data-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post">
+                    <div class="form-group">
+                        <div>
+                            <label>Depo</label>
+                            <select id="add-depoId" class="form-control" required>
+                                <option value="">Seçiniz</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Urun Kod</label>
+                            <input type="text" class="form-control" id="add-urunKod" required />
+                        </div>
+                        <div>
+                            <label>Urun Adi</label>
+                            <input type="text" class="form-control" id="add-urunAdi" required />
+                        </div>
+                        <div>
+                            <label>Açıklama</label>
+                            <input type="text" class="form-control" id="add-aciklama" required />
+                        </div>
+                        <div>
+                            <label>Cihaz Tip</label>
+                            <input type="text" class="form-control" id="add-cihazTip" required />
+                        </div>
+                        <div>
+                            <label>Marka</label>
+                            <input type="text" class="form-control" id="add-marka" required />
+                        </div>
+                        <div>
+                            <label>Model</label>
+                            <input type="text" class="form-control" id="add-model" required />
+                        </div>
+                        <div>
+                            <label>Seri No</label>
+                            <input type="text" class="form-control" id="add-seriNo" required />
+                        </div>
+                        <div>
+                            <label>Kullanıcı</label>
+                            <select id="add-kullaniciId" class="form-control" required>
+                                <option value="">Seçiniz</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Kategori</label>
+                            <select id="add-kategoriId" class="form-control" required>
+                                <option value="">Seçiniz</option>
+                            </select>
+                        </div>
+
+                          <div>
+
+                        <label>Depodan Çıkış Tarihi</label>
+                        <input type="date" class="form-control" id="add-cikisTarihi" />
+                        </div>
+                        <label style="margin-top:15px;">Stok Durumu</label>
+                        <div style="font-size:large;">
+                            <label for="option1">Var</label>
+                            <input type="radio" id="option1" name="radioValue" value="true" />
+                            <label for="option2">Yok</label>
+                            <input type="radio" id="option2" name="radioValue" value="false" />
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-primary" id="saveBtn" onclick="AddData();">Kaydet</button>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@*Güncelle modal*@
+<div class="modal fade modal" id="updateMdl">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="text-info modal-title">Güncelle</h1>
+                <button class="btn-close text-danger" data-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <div>
+                            <label>Urun Id</label>
+                            <input type="text" class="form-control" id="upd-urunId" disabled="disabled" />
+                        </div>
+                        <div>
+                            <label>Depo</label>
+                            <select id="upd-depoId" class="form-control" required>
+                                <option value="">Seçiniz</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Urun Kod</label>
+                            <input type="text" class="form-control" id="upd-urunKod" required />
+                        </div>
+                      
+                        <div>
+                            <label>Urun Adi</label>
+                            <input type="text" class="form-control" id="upd-urunAdi" required />
+                        </div>
+                        <div>
+                            <label>Açıklama</label>
+                            <input type="text" class="form-control" id="upd-aciklama" required />
+                        </div>
+                        <div>
+                            <label>Cihaz Tip</label>
+                            <input type="text" class="form-control" id="upd-cihazTip" required />
+                        </div>
+                        <div>
+                            <label>Marka</label>
+                            <input type="text" class="form-control" id="upd-marka" required />
+                        </div>
+                        <div>
+                            <label>Model</label>
+                            <input type="text" class="form-control" id="upd-model" required />
+                        </div>
+                        <div>
+                            <label>Seri No</label>
+                            <input type="text" class="form-control" id="upd-seriNo" required />
+                        </div>
+                        <div>
+                            <label>Kullanıcı</label>
+                            <select id="upd-kullaniciId" class="form-control" required>
+                                <option value="">Seçiniz</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Kategori</label>
+                            <select id="upd-kategoriId" class="form-control" required>
+                                <option value="">Seçiniz</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Eklenme Tarihi</label>
+                            <input type="text" class="form-control" id="upd-eklenmeTarihi" disabled="disabled" />
+                        </div>
+                        <div>
+                            <label>Depodan Çıkış Tarihi</label>
+                            <input type="date" class="form-control" id="upd-cikisTarihi" />
+                        </div>
+                      
+                        <label style="margin-top:15px;">Stokta var mı?</label>
+                        <div style="font-size:large;">
+                            <label for="option1">Var</label>
+                            <input type="radio" name="radioValue1" value="true" />
+                            <label for="option2">Yok</label>
+                            <input type="radio" name="radioValue1" value="false" />
+                        </div>
+
+
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-primary" id="updateSaveBtn" onclick="UpdateData()">Kaydet</button>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+@*<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/js/bootstrap.min.js"></script>*@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<script src="/js/Urunler.js"></script>
+
